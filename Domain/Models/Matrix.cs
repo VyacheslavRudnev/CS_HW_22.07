@@ -54,7 +54,6 @@ namespace Domain.Models
         }
         public void Show()
         {
-            Console.WriteLine("Ваша матриця: ");
             for (int i = 0; i < _rows; i++)
             {
                 for (int j = 0; j < _columns; j++) Console.Write($"{_matrix[i, j]} \t");
@@ -80,7 +79,83 @@ namespace Domain.Models
             }
             Console.WriteLine($"Найменший елемент матриці: {min}");
         }
+        public static Matrix operator +(Matrix matrix1, Matrix matrix2)
+        {
+            Matrix matrix = new Matrix(matrix1._rows, matrix1._columns);
+            for (int i = 0; i < matrix1._rows; i++)
+            {
+                for (int j = 0; j < matrix1._columns; j++) matrix._matrix[i, j] = matrix1._matrix[i, j] + matrix2._matrix[i, j];
+            }
+            return matrix;
+        }
+        public static Matrix operator -(Matrix matrix1, Matrix matrix2)
+        {
+            Matrix matrix = new Matrix(matrix1._rows, matrix1._columns);
+            for (int i = 0; i < matrix1._rows; i++)
+            {
+                for (int j = 0; j < matrix1._columns; j++) matrix._matrix[i, j] = matrix1._matrix[i, j] - matrix2._matrix[i, j];
+            }
+            return matrix;
+        }
+        public static Matrix operator *(Matrix matrix1, Matrix matrix2)
+        {
+            Matrix matrix = new Matrix(matrix1._rows, matrix2._columns);
+            for (int i = 0; i < matrix1._rows; i++)
+            {
+                for (int j = 0; j < matrix2._columns; j++)
+                {
+                    matrix._matrix[i, j] = 0;
+                    for (int k = 0; k < matrix1._columns; k++) matrix._matrix[i, j] += matrix1._matrix[i, k] * matrix2._matrix[k, j];
+                }
+            }
+            return matrix;
+        }
+        public static Matrix operator *(Matrix matrix1, int number)
+        {
+            Matrix matrix = new Matrix(matrix1._rows, matrix1._columns);
+            for (int i = 0; i < matrix1._rows; i++)
+            {
+                for (int j = 0; j < matrix1._columns; j++) matrix._matrix[i, j] = matrix1._matrix[i, j] * number;
+            }
+            return matrix;
+        }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+                return false;
 
+            Matrix otherMatrix = (Matrix)obj;
+
+            if (_rows != otherMatrix._rows || _columns != otherMatrix._columns)
+                return false;
+
+            for (int i = 0; i < _rows; i++)
+            {
+                for (int j = 0; j < _columns; j++)
+                {
+                    if (_matrix[i, j] != otherMatrix._matrix[i, j])
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool operator ==(Matrix matrix1, Matrix matrix2)
+        {
+            if (ReferenceEquals(matrix1, matrix2))
+                return true;
+
+            if (matrix1 is null || matrix2 is null)
+                return false;
+
+            return matrix1.Equals(matrix2);
+        }
+
+        public static bool operator !=(Matrix matrix1, Matrix matrix2)
+        {
+            return !(matrix1 == matrix2);
+        }
     }
 }
