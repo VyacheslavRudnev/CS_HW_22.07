@@ -32,7 +32,7 @@ namespace Domain.Models
 
         public override string ToString()
         {
-            return $"Назва: {Title}\n Автор: {Author}\nРік публікації: {YearOfPublishing}\n";
+            return $"\tНазва: {Title}\tАвтор: {Author}\tРік публікації: {YearOfPublishing}\n";
         }
 
     }
